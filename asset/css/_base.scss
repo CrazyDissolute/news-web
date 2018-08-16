@@ -1,0 +1,199 @@
+@charset "utf-8";
+
+@mixin float($dir:left) {
+  float: $dir;
+}
+
+//清除浮动;
+@mixin clear() {
+  *zoom: 1;
+  &:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    overflow: hidden;
+  }
+}
+
+//一行显示;
+@mixin ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+//多行显示;
+@mixin ellipsis-clamp($row: 3){
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $row;
+  overflow: hidden;
+}
+
+// 强制折行;
+@mixin break-word {
+  word-break: break-all;        /*支持IE，chrome，FF不支持*/
+  word-wrap: break-word;        /*支持IE，chrome，FF*/
+}
+
+//css3过渡;
+@mixin tran($name:all,$time:2s) {
+  -webkit-transition: $name $time; /* Safari 和 Chrome */
+  -moz-transition: $name $time; /* Firefox 4 */
+  -ms-transition: $name $time; /* IE */
+  -o-transition: $name $time; /* Opera */
+  transition: $name $time;
+}
+
+//css3;
+@mixin css3( $style,$frames ) {
+  -webkit-#{$style} : $frames; /* Safari 和 Chrome */
+  -moz-#{$style} : $frames; /* Firefox 4 */
+  -o-#{$style} : $frames; /* Opera */
+  #{$style} : $frames;
+}
+
+//透明;
+@mixin opa($num:0.8) {
+  opacity: $num;
+  filter: alpha(opacity=$num*100);
+}
+
+//css3圆角;
+@mixin border-radius($radius: 5px) {
+  -webkit-border-radius: $radius; /* Safari 和 Chrome */
+  -moz-border-radius: $radius; /* Firefox 4 */
+  -ms-border-radius: $radius; /* IE */
+  -o-border-radius: $radius; /* Opera */
+  border-radius: $radius;
+}
+
+//改变默认选中颜色
+@mixin selection( $bg:#00F,$color:#fff,$obj:0 ) {
+
+  @if (type-of($obj) == number) {
+
+    ::selection {
+      background: $bg;
+      color: $color;
+    }
+    ::-moz-selection {
+      background: $bg;
+      color: $color;
+    }
+    ::-webkit-selection {
+      background: $bg;
+      color: $color;
+    }
+    ::-ms-selection {
+      background: $bg;
+      color: $color;
+    }
+    ::-o-selection {
+      background: $bg;
+      color: $color;
+    }
+
+  } @else {
+
+    .#{$obj}::selection {
+      background: $bg;
+      color: $color;
+    }
+    .#{$obj}::-moz-selection {
+      background: $bg;
+      color: $color;
+    }
+    .#{$obj}::-webkit-selection {
+      background: $bg;
+      color: $color;
+    }
+    .#{$obj}::-ms-selection {
+      background: $bg;
+      color: $color;
+    }
+    .#{$obj}::-o-selection {
+      background: $bg;
+      color: $color;
+    }
+
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////
+// css3动画,只能写在调用页面,配合.css3( @style,@frames )使用;            //
+// 例子 :                                                                //
+//  @include keyframes(animation-name) {                                 //
+//      0% {                                                             //
+//         #{$browser}transform: translate3d(100%, 0, 0);                //
+//      }                                                                //
+//      100% {                                                           //
+//          #{$browser}transform: translate3d(0%, 0, 0);                 //
+//      }                                                                //
+//   }                                                                   //
+//   .className{ @include css3(animation,animation-name 5s infinite); }  //
+///////////////////////////////////////////////////////////////////////////
+$browser: null;
+@mixin keyframes($animationName) {
+  @-webkit-keyframes #{$animationName} {
+    $browser: '-webkit-' !global;
+    @content;
+  }
+  @-moz-keyframes #{$animationName} {
+    $browser: '-moz-' !global;
+    @content;
+  }
+  @-ms-keyframes #{$animationName} {
+    $browser: '-ms-' !global;
+    @content;
+  }
+  @-o-keyframes #{$animationName} {
+    $browser: '-o-' !global;
+    @content;
+  }
+  @keyframes #{$animationName} {
+    $browser: '' !global;
+    @content;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////
+// css3 滚动条;                                                          //
+// 例子 :                                                                //
+//  @include scrollbar(scrollbar-track){                                 //
+//    #{$browser}box-shadow: inset 0 0 6px rgba(0,0,0,0.3);              //
+//    background-color: #F5F5F5;                                         //
+//  };                                                                   //
+//  @include scrollbar(scrollbar){                                       //
+//    width: 12px;                                                       //
+//  };                                                                   //
+//  @include scrollbar(scrollbar-thumb){                                 //
+//    #{$browser}border-radius: 10px;                                    //
+//    #{$browser}box-shadow: inset 0 0 6px rgba(0,0,0,.3);               //
+//    background-color: #fbd0c9;                                         //
+//  };                                                                   //
+///////////////////////////////////////////////////////////////////////////
+@mixin scrollbar($style) {
+  ::-webkit-#{$style} {
+    $browser: '-webkit-' !global;
+    @content;
+  }
+  ::-moz-#{$style} {
+    $browser: '-moz-' !global;
+    @content;
+  }
+  ::-ms-#{$style} {
+    $browser: '-ms-' !global;
+    @content;
+  }
+  ::-o-#{$style} {
+    $browser: '-o-' !global;
+    @content;
+  }
+  ::#{$style} {
+    $browser: '' !global;
+    @content;
+  }
+}
