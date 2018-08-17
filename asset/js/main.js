@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: '/web/asset/js/',
+    baseUrl: '/news-web/asset/js/',
     paths: {
         'libs': 'libs',
         'components': 'components',
